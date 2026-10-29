@@ -2,6 +2,8 @@ import pickle
 import streamlit as st
 import requests
 from sklearn.metrics.pairwise import cosine_similarity
+import gdown
+import os
 
 def fetch_poster(movie_id):
     response = requests.get(
@@ -28,7 +30,15 @@ def recommend(movie):
 
 st.header('Movie Recommender System')
 movies = pickle.load(open('movie_list.pkl','rb'))
-similarity = pickle.load(open('similarity.pkl','rb'))
+
+
+file_id ="1QfJbppGY7cIehqRxGXLLyftgsHSOxwIn"
+url = f"https://drive.google.com/uc?id={file_id}"
+
+if not os.path.exists("similarity.pkl"):
+    gdown.download(url, "similarity.pkl", quiet=False)
+
+similarity = pickle.load(open("similarity.pkl", "rb"))
 
 movie_list = movies['title'].values
 selected_movie = st.selectbox(
